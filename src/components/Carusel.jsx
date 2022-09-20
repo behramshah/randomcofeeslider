@@ -1,27 +1,59 @@
 import React, {useEffect, useState} from "react";
-import { axiosInstance } from '../utils/axios';
+import axios from "axios";
 
 const Carusel = () => {
 
-    const [image, setImage] = useState([]);
+    let endpoints = [
+        'https://dog.ceo/api/breeds/image/random',
+        'https://dog.ceo/api/breeds/image/random',
+        'https://dog.ceo/api/breeds/image/random',
+        'https://dog.ceo/api/breeds/image/random',
+        'https://dog.ceo/api/breeds/image/random',
+      ]        
+    
+      const [images, setImages] = useState([]);
+      const [currentIndex, setCurrentIndex] = useState(0);
 
-    console.log(image)
+      const showPrev = () => {
+        if(currentIndex > 0) {
+            setCurrentIndex(currentIndex-1)
+        } else { return }
+      }
 
-    const fetchImage = async () => {
-        const res = await fetch('https://picsum.photos/200/300');
-        const imageBlob = await res.blob();
-        const imageObjectURL = URL.createObjectURL(imageBlob);
-        setImage(imageObjectURL);
-      };
+      const showNext = () => {
+        if(currentIndex < 4){
+            setCurrentIndex(currentIndex+1)
+        } else { return}
+      }
 
-    useEffect(() =>{
-        fetchImage();
-    },[])
+      let randomIndex = () =>{ return Math.floor(Math.random() * 5)};
+
+    
+      useEffect(() =>{
+        axios.all(endpoints.map((endpoint) => axios.get(endpoint)))
+        .then(data => setImages([...images, ...data]))
+      },[])
+
+      
+
+      useEffect(() =>{
+        let timer = setInterval(() => setCurrentIndex(randomIndex()), 3000)
+        return () => {
+            clearInterval(timer);
+          };
+      },[])
+
+      console.log(images[currentIndex]?.data?.message)
+      const imgUrl = images[currentIndex]?.data?.message;
 
     return (
         <>
             <h1>Carusel</h1>
-            <img src={image} alt="icons" />
+            <button onClick={showPrev}>prev</button>
+            {
+                imgUrl && <img src={imgUrl} alt="dog" width="300px" height="250px"/> 
+            }
+            <button onClick={showNext}>next</button>
         </>
     )
 }

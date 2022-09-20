@@ -1,6 +1,6 @@
 const axios = require('axios').default;
 
 export const axiosInstance = axios.create({
-    baseURL: 'https://coffee.alexflipnote.dev/random.json',
+    baseURL: 'https://dog.ceo/api/breeds/image/random',
     timeout: 2000,
 });

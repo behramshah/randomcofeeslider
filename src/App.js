@@ -1,10 +1,18 @@
 import Carusel from "./components/Carusel";
 
+const containerStyles = {
+  width: "500px",
+  height: "280px",
+  margin: "0 auto",
+};
 
-function App() {
+function App() { 
+
   return (
-    <div className="App">
-      <Carusel/>
+    <div>
+      <div style={containerStyles}>
+        <Carusel />
+      </div>
     </div>
   );
 }
